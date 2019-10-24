@@ -18,6 +18,14 @@
 - copy-webpack-plugin 拷贝静态文件
 - extensions 指定extensions 之后可以不用再require 或是import的时候加文件扩展名，会一次尝试添加扩展名进行匹配
 - alias 配置别名可以加快webpack查找模块的速度 
+- DefinePlugin 创建一些在编译时可以配置的全局常量
+- webpack-merge 合并配置文件
+- IgnorePlugin 用于忽略某些特定的模块，让webpack不把这些指定的模块打包进去
+- image-webpack-loader 可以对图片进行压缩和优化
+- purgecss-webpack-plugin 可以去除未使用的 css，一般与 glob、glob-all 配合使用
+- CDN 内容分发网络，通过把资源部署到世界各地，用户在访问时按照就近原则从离用户最近的服务器获取资源，
+- px2rem-loader 页面渲染时计算根元素的font-size值
+从而加速资源的获取速度
  ```
  let glob = require("glob")
  let files = glob.sync('./src/**/*.js')
@@ -45,3 +53,8 @@
     - module 包含loader的sourcemap(比如jsx to js ,babel的sourcemap),否则无法定义源文件
     - inline 将.map作为DataURI 嵌入 ，不单独生成.map文件
     - module-source-map 能看到真正的源码 source-map只能看到或者说调试babel转移后的代码
+
+
+    ## 多入口
+    - 有时候我们的页面可以不止一个HTML页面，会有多个页面，所以就需要多入口
+    - 每一次页面跳转的试试，后台服务器都会返回一个新的html文档，这种类型的网站就是多页网站，也叫多页应用

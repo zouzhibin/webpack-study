@@ -4,6 +4,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CopyWebpackPlugin = require("copy-webpack-plugin")
 const HtmlWebpackExternalsPlugin = require("html-webpack-externals-plugin")
 const OptimizeCssAssetsWebpackPlugin = require("optimize-css-assets-webpack-plugin")
+const glob = require('glob');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
 module.exports={
     optimization:{ // 这里放着优化的内容
         minimizer:[ // 表示放优化的插件
@@ -18,6 +20,8 @@ module.exports={
             })
         ]
     },
+    // 配置哪些模块不需要读取并且转成语法树进行解析依赖
+    noParse:/jquery|lodash/,
     // externals:{
     //     'jquery':'jQuery', // key是jquery,是一个包的名字，值是jQuery，是全局的变量名
     // },
@@ -143,6 +147,16 @@ module.exports={
         new CopyWebpackPlugin([{
             from :path.resolve(__dirname,'src/assets'), // 静态资源目录源地址
             to :path.resolve(__dirname,'data/assets'), // 目标地址 相对于output的 path目录
-        }])
+        }]),
+        // 会把这些变量和值挂到全局对象上
+        new webpack.DefinePlugin({
+            PRODUCTION:JSON.stringify(true)
+        }),
+        // 代表 moment下面的./local文件夹
+        new webpack.IgnorePlugin(/^\.\/local/,/moment$/),
+        new PurgecssPlugin({
+            paths: glob.sync(`${path.join(__dirname, 'src')}/**/*`, 
+            {nodir: true}), // 不匹配目录，只匹配文件
+        }),
     ]
 }
